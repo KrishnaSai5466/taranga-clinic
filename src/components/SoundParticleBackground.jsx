@@ -11,7 +11,7 @@ function SoundParticleBackground() {
     let animationFrameId;
     let time = 0;
     let particles = [];
-    const maxParticles = 180;
+    const maxParticles = 250; // More particles for a fuller wave
 
     class Particle {
       constructor(width, height) {
@@ -19,14 +19,16 @@ function SoundParticleBackground() {
       }
 
       reset(width, height, initial = false) {
+        // Spread starting positions across the width if initial, otherwise start at the left edge
         this.x = initial ? Math.random() * width : -10;
-        this.speed = 1.0 + Math.random() * 2.0; // Left to right speed
-        this.size = 1.0 + Math.random() * 2.5; // Glowing particle size
-        this.alpha = 0.15 + Math.random() * 0.65;
+        this.speed = 0.8 + Math.random() * 1.8; // Left to right movement speed
+        this.size = 2.0 + Math.random() * 3.5; // Larger particles (2px to 5.5px) for clear visibility
+        this.alpha = 0.35 + Math.random() * 0.55; // Higher base opacity (35% to 90%)
         this.waveSelect = Math.floor(Math.random() * 3); // Assign to one of 3 waveforms
-        this.offsetY = (Math.random() - 0.5) * 60; // Spread of the particle stream
-        // Curated brand color palette: Cyan, Blue, Purple
-        this.hue = [185, 215, 265][Math.floor(Math.random() * 3)];
+        this.offsetY = (Math.random() - 0.5) * 80; // Vertical spread of the stream
+        
+        // Brand color palette (Cyan, Blue, Purple)
+        this.hue = [185, 215, 260][Math.floor(Math.random() * 3)];
       }
 
       update(width, height, time) {
@@ -35,11 +37,11 @@ function SoundParticleBackground() {
         // Wave characteristics based on wave type
         let freq, amp, speedCoeff;
         if (this.waveSelect === 0) {
-          freq = 0.003; amp = 80; speedCoeff = 0.03;
+          freq = 0.0025; amp = 100; speedCoeff = 0.02;
         } else if (this.waveSelect === 1) {
-          freq = 0.006; amp = 50; speedCoeff = 0.05;
+          freq = 0.005; amp = 60; speedCoeff = 0.035;
         } else {
-          freq = 0.002; amp = 100; speedCoeff = 0.02;
+          freq = 0.0018; amp = 120; speedCoeff = 0.015;
         }
 
         const centerY = height / 2;
@@ -62,10 +64,10 @@ function SoundParticleBackground() {
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
         ctx.fillStyle = `hsla(${this.hue}, 90%, 65%, ${this.currentAlpha})`;
-        ctx.shadowColor = `hsla(${this.hue}, 90%, 65%, ${this.currentAlpha * 0.4})`;
-        ctx.shadowBlur = 5;
+        ctx.shadowColor = `hsla(${this.hue}, 90%, 65%, ${this.currentAlpha * 0.6})`;
+        ctx.shadowBlur = 6;
         ctx.fill();
-        ctx.shadowBlur = 0; // reset shadow to avoid performance hit
+        ctx.shadowBlur = 0; // reset
       }
     }
 
@@ -76,9 +78,11 @@ function SoundParticleBackground() {
       canvas.height = parent.clientHeight * window.devicePixelRatio;
       canvas.style.width = '100%';
       canvas.style.height = '100%';
+      
+      // Reset scale before setting it to prevent stacking scale calls
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
       ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
 
-      // Re-initialize particles to fill canvas properly
       const width = canvas.width / window.devicePixelRatio;
       const height = canvas.height / window.devicePixelRatio;
       particles = [];

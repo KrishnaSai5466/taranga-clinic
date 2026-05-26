@@ -37,7 +37,7 @@ function Home() {
       {/* Hero Section */}
       <section className="relative min-h-[85vh] flex items-center justify-center overflow-hidden py-20 px-6 md:px-12 border-b border-slate-900">
         {/* Animated Sound Particles Background */}
-        <div className="absolute inset-0 -z-10 pointer-events-none opacity-45">
+        <div className="absolute inset-0 -z-10 pointer-events-none opacity-80">
           <SoundParticleBackground />
         </div>
         {/* Background Decorative Blurs */}
