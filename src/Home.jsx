@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useForm, ValidationError } from '@formspree/react';
+import SoundWave from './components/SoundWave';
 
 function Home() {
   const [state, handleSubmit] = useForm('mlgzyjge');
@@ -98,6 +99,15 @@ function Home() {
           </div>
         </div>
       </section>
+
+      {/* Fluid Sound Wave Separator */}
+      <div className="w-full bg-slate-950 border-y border-slate-900/40 py-8 relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 via-transparent to-purple-500/5 pointer-events-none"></div>
+        <div className="max-w-7xl mx-auto px-6 text-center space-y-2 relative z-10">
+          <p className="text-[10px] text-slate-500 font-bold uppercase tracking-[0.25em]">Visualizing Communication Frequencies & Acoustic Waves</p>
+          <SoundWave />
+        </div>
+      </div>
 
       {/* Services Section */}
       <section id="services" className="py-32 px-6 max-w-7xl mx-auto">
