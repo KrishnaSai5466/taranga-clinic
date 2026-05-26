@@ -11,7 +11,7 @@ function SoundParticleBackground() {
     let animationFrameId;
     let time = 0;
     let particles = [];
-    const maxParticles = 220; // Dense, rich particle stream
+    const maxParticles = 140; // Moderated count for a clean, non-cluttered look
 
     class Particle {
       constructor(width, height) {
@@ -19,39 +19,49 @@ function SoundParticleBackground() {
       }
 
       reset(width, height, initial = false) {
+        // Set starting coordinate
         this.x = initial ? Math.random() * width : -10;
-        this.speed = 0.5 + Math.random() * 1.5; // Smooth flowing speed
-        this.size = 2.0 + Math.random() * 4.0; // Glowing particles (2px to 6px)
-        this.alpha = 0.4 + Math.random() * 0.5; // High visibility opacity
-        this.waveSelect = Math.floor(Math.random() * 3);
-        this.offsetY = (Math.random() - 0.5) * 120; // Spread vertically across the hero background
         
-        // Brand color palette (Cyan, Blue, Purple)
-        this.hue = [185, 215, 260][Math.floor(Math.random() * 3)];
+        // Slower, calming speed (drift rather than rush)
+        this.speed = 0.2 + Math.random() * 0.45; 
+        
+        // Soft, varying sizes (1.5px to 4.5px)
+        this.size = 1.5 + Math.random() * 3.0; 
+        
+        // Gentle, non-distracting opacity (15% to 55%)
+        this.alpha = 0.15 + Math.random() * 0.4; 
+        
+        this.waveSelect = Math.floor(Math.random() * 3);
+        
+        // Soft vertical dispersion across the hero
+        this.offsetY = (Math.random() - 0.5) * 160; 
+        
+        // Soft glowing brand colors (Cyan, Indigo/Blue, Purple)
+        this.hue = [188, 222, 268][Math.floor(Math.random() * 3)];
       }
 
       update(width, height, time) {
         this.x += this.speed;
 
-        // Distinct waves to create a fluid, overlapping texture
+        // Relaxing, slow sine wave motions
         let freq, amp, speedCoeff;
         if (this.waveSelect === 0) {
-          freq = 0.002; amp = 120; speedCoeff = 0.015;
+          freq = 0.0012; amp = 90; speedCoeff = 0.004; // Long, slow undulations
         } else if (this.waveSelect === 1) {
-          freq = 0.004; amp = 80; speedCoeff = 0.03;
+          freq = 0.0025; amp = 50; speedCoeff = 0.007; // Gentle secondary waves
         } else {
-          freq = 0.0015; amp = 150; speedCoeff = 0.01;
+          freq = 0.0008; amp = 120; speedCoeff = 0.003; // Deep base swells
         }
 
         const centerY = height / 2;
         const sineVal = Math.sin(this.x * freq + time * speedCoeff);
         this.y = centerY + sineVal * amp + this.offsetY;
 
-        // Smooth fade-in near left edge, fade-out near right edge
+        // Smooth boundaries: fade in/out near edges of the viewport
         const edgeFade = Math.sin((this.x / width) * Math.PI);
         this.currentAlpha = Math.max(0, this.alpha * edgeFade);
 
-        // Reset if goes off-screen
+        // Reset particle on crossing the right boundary
         if (this.x > width + 10) {
           this.reset(width, height);
         }
@@ -61,11 +71,13 @@ function SoundParticleBackground() {
         if (this.currentAlpha <= 0) return;
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-        ctx.fillStyle = `hsla(${this.hue}, 90%, 65%, ${this.currentAlpha})`;
-        ctx.shadowColor = `hsla(${this.hue}, 90%, 65%, ${this.currentAlpha * 0.5})`;
-        ctx.shadowBlur = 8;
+        
+        // Soft glow using shadowBlur and translucent fills
+        ctx.fillStyle = `hsla(${this.hue}, 85%, 68%, ${this.currentAlpha})`;
+        ctx.shadowColor = `hsla(${this.hue}, 85%, 68%, ${this.currentAlpha * 0.4})`;
+        ctx.shadowBlur = 6;
         ctx.fill();
-        ctx.shadowBlur = 0; // reset
+        ctx.shadowBlur = 0; // reset to optimize rendering
       }
     }
 
@@ -76,7 +88,7 @@ function SoundParticleBackground() {
       const parentWidth = parent.clientWidth;
       const parentHeight = parent.clientHeight;
 
-      // Bulletproof Resize Check: Automatically resize internal canvas buffer if container size changed
+      // Adjust buffer size to match viewport device pixels
       if (
         canvas.width !== parentWidth * window.devicePixelRatio ||
         canvas.height !== parentHeight * window.devicePixelRatio
