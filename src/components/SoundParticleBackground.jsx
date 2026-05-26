@@ -12,7 +12,7 @@ function SoundParticleBackground() {
     let time = 0;
     let particles = [];
     let lastTime = performance.now();
-    const maxParticles = 180; // Dense, elegant particle stream
+    const maxParticles = 180; // Stable, dense particle stream
 
     class Particle {
       constructor(width, height) {
@@ -85,35 +85,47 @@ function SoundParticleBackground() {
       }
     }
 
-    const render = (now) => {
+    const initParticles = (width, height) => {
+      particles = [];
+      for (let i = 0; i < maxParticles; i++) {
+        particles.push(new Particle(width, height));
+      }
+    };
+
+    const resize = () => {
       const parent = canvas.parentElement;
       if (!parent) return;
 
-      const parentWidth = parent.clientWidth;
-      const parentHeight = parent.clientHeight;
+      const width = parent.clientWidth;
+      const height = parent.clientHeight;
 
-      // Dynamic resize detection
-      if (
-        canvas.width !== parentWidth * window.devicePixelRatio ||
-        canvas.height !== parentHeight * window.devicePixelRatio
-      ) {
-        canvas.width = parentWidth * window.devicePixelRatio;
-        canvas.height = parentHeight * window.devicePixelRatio;
-        canvas.style.width = '100%';
-        canvas.style.height = '100%';
+      // Set display layout sizes
+      canvas.style.width = `${width}px`;
+      canvas.style.height = `${height}px`;
 
-        ctx.setTransform(1, 0, 0, 1, 0, 0);
-        ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+      // Set backing store dimensions (avoiding floating point comparison loops)
+      canvas.width = Math.round(width * window.devicePixelRatio);
+      canvas.height = Math.round(height * window.devicePixelRatio);
 
-        const width = canvas.width / window.devicePixelRatio;
-        const height = canvas.height / window.devicePixelRatio;
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
 
-        particles = [];
-        for (let i = 0; i < maxParticles; i++) {
-          particles.push(new Particle(width, height));
-        }
-      }
+      initParticles(width, height);
+    };
 
+    // Perform initial size configuration
+    resize();
+
+    // Use ResizeObserver to decouple layout recalculations from the animation render loop
+    const resizeObserver = new ResizeObserver(() => {
+      resize();
+    });
+
+    if (canvas.parentElement) {
+      resizeObserver.observe(canvas.parentElement);
+    }
+
+    const render = (now) => {
       // Calculate delta time in seconds
       let dt = (now - lastTime) / 1000;
       // Cap delta time to prevent massive jumps when switching tabs
@@ -142,11 +154,12 @@ function SoundParticleBackground() {
 
     return () => {
       cancelAnimationFrame(animationFrameId);
+      resizeObserver.disconnect();
     };
   }, []);
 
   return (
-    <canvas ref={canvasRef} className="block w-full h-full" />
+    <canvas ref={canvasRef} className="block w-full h-full pointer-events-none" />
   );
 }
 
