@@ -22,13 +22,13 @@ function SoundParticleBackground() {
         // Set starting coordinate
         this.x = initial ? Math.random() * width : -10;
         
-        // Calming, slow drift speed (relaxing visual flow)
-        this.speed = 0.25 + Math.random() * 0.45; 
+        // Halved speed (0.125 to 0.35) for a super slow-motion drift
+        this.speed = 0.125 + Math.random() * 0.225; 
         
         // Exact size constraint: 2px to 6px
         this.size = 2.0 + Math.random() * 4.0; 
         
-        // Soft glowing opacity to remain professional and relaxing
+        // Soft glowing opacity
         this.alpha = 0.15 + Math.random() * 0.45; 
         
         this.waveSelect = Math.floor(Math.random() * 3);
@@ -43,14 +43,14 @@ function SoundParticleBackground() {
       update(width, height, time) {
         this.x += this.speed;
 
-        // Three distinct slow-moving mathematical waveforms
+        // Halved wave speed coefficients
         let freq, amp, speedCoeff;
         if (this.waveSelect === 0) {
-          freq = 0.0012; amp = 100; speedCoeff = 0.004; // Long, rolling waves
+          freq = 0.0012; amp = 100; speedCoeff = 0.002;
         } else if (this.waveSelect === 1) {
-          freq = 0.0025; amp = 60; speedCoeff = 0.007;  // Intermediary ripples
+          freq = 0.0025; amp = 60; speedCoeff = 0.0035;
         } else {
-          freq = 0.0008; amp = 130; speedCoeff = 0.003; // Deep swell waves
+          freq = 0.0008; amp = 130; speedCoeff = 0.0015;
         }
 
         const centerY = height / 2;
@@ -77,7 +77,7 @@ function SoundParticleBackground() {
         ctx.shadowColor = `hsla(${this.hue}, 85%, 68%, ${this.currentAlpha * 0.4})`;
         ctx.shadowBlur = 6;
         ctx.fill();
-        ctx.shadowBlur = 0; // reset to optimize rendering performance
+        ctx.shadowBlur = 0; // reset
       }
     }
 
@@ -120,7 +120,7 @@ function SoundParticleBackground() {
         p.draw(ctx);
       });
 
-      time += 0.5;
+      time += 0.25; // Halved from 0.5 to slow down wave animations
       animationFrameId = requestAnimationFrame(render);
     };
 
