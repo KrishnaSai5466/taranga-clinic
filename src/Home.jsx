@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useForm, ValidationError } from '@formspree/react';
-import SoundWave from './components/SoundWave';
+import SoundParticleBackground from './components/SoundParticleBackground';
 
 function Home() {
   const [state, handleSubmit] = useForm('mlgzyjge');
@@ -36,6 +36,10 @@ function Home() {
     <div className="min-h-screen bg-slate-950 text-slate-100 font-sans selection:bg-blue-600 selection:text-white pb-12">
       {/* Hero Section */}
       <section className="relative min-h-[85vh] flex items-center justify-center overflow-hidden py-20 px-6 md:px-12 border-b border-slate-900">
+        {/* Animated Sound Particles Background */}
+        <div className="absolute inset-0 -z-10 pointer-events-none opacity-45">
+          <SoundParticleBackground />
+        </div>
         {/* Background Decorative Blurs */}
         <div className="absolute top-1/4 left-1/4 w-[400px] h-[400px] bg-blue-500/10 rounded-full blur-3xl -z-10 animate-pulse"></div>
         <div className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-purple-500/10 rounded-full blur-3xl -z-10"></div>
@@ -99,15 +103,6 @@ function Home() {
           </div>
         </div>
       </section>
-
-      {/* Fluid Sound Wave Separator */}
-      <div className="w-full bg-slate-950 border-y border-slate-900/40 py-8 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 via-transparent to-purple-500/5 pointer-events-none"></div>
-        <div className="max-w-7xl mx-auto px-6 text-center space-y-2 relative z-10">
-          <p className="text-[10px] text-slate-500 font-bold uppercase tracking-[0.25em]">Visualizing Communication Frequencies & Acoustic Waves</p>
-          <SoundWave />
-        </div>
-      </div>
 
       {/* Services Section */}
       <section id="services" className="py-32 px-6 max-w-7xl mx-auto">
