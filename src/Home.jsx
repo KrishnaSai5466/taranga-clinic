@@ -35,7 +35,7 @@ function Home() {
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 font-sans selection:bg-blue-600 selection:text-white pb-12">
       {/* Hero Section */}
-      <section className="relative min-h-[85vh] flex items-center justify-center overflow-hidden py-20 px-6 md:px-12 border-b border-slate-900">
+      <section className="relative isolate min-h-[85vh] flex items-center justify-center overflow-hidden py-20 px-6 md:px-12 border-b border-slate-900">
         {/* Animated Sound Particles Background */}
         <div className="absolute inset-0 -z-10 pointer-events-none opacity-80">
           <SoundParticleBackground />
