@@ -22,8 +22,8 @@ function SoundParticleBackground() {
         // Set starting coordinate
         this.x = initial ? Math.random() * width : -10;
         
-        // Halved speed (0.125 to 0.35) for a super slow-motion drift
-        this.speed = 0.125 + Math.random() * 0.225; 
+        // Ultra-slow motion speed (0.05 to 0.18) for a barely-perceptible, relaxing drift
+        this.speed = 0.05 + Math.random() * 0.13; 
         
         // Exact size constraint: 2px to 6px
         this.size = 2.0 + Math.random() * 4.0; 
@@ -43,14 +43,14 @@ function SoundParticleBackground() {
       update(width, height, time) {
         this.x += this.speed;
 
-        // Halved wave speed coefficients
+        // Ultra-slow wave speed coefficients
         let freq, amp, speedCoeff;
         if (this.waveSelect === 0) {
-          freq = 0.0012; amp = 100; speedCoeff = 0.002;
+          freq = 0.0012; amp = 100; speedCoeff = 0.0006;
         } else if (this.waveSelect === 1) {
-          freq = 0.0025; amp = 60; speedCoeff = 0.0035;
+          freq = 0.0025; amp = 60; speedCoeff = 0.001;
         } else {
-          freq = 0.0008; amp = 130; speedCoeff = 0.0015;
+          freq = 0.0008; amp = 130; speedCoeff = 0.0004;
         }
 
         const centerY = height / 2;
@@ -120,7 +120,7 @@ function SoundParticleBackground() {
         p.draw(ctx);
       });
 
-      time += 0.25; // Halved from 0.5 to slow down wave animations
+      time += 0.08; // Decreased from 0.25 for an ultra-slow motion flow
       animationFrameId = requestAnimationFrame(render);
     };
 
