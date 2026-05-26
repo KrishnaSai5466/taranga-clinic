@@ -11,7 +11,7 @@ function SoundParticleBackground() {
     let animationFrameId;
     let time = 0;
     let particles = [];
-    const maxParticles = 250; // More particles for a fuller wave
+    const maxParticles = 220; // Dense, rich particle stream
 
     class Particle {
       constructor(width, height) {
@@ -19,13 +19,12 @@ function SoundParticleBackground() {
       }
 
       reset(width, height, initial = false) {
-        // Spread starting positions across the width if initial, otherwise start at the left edge
         this.x = initial ? Math.random() * width : -10;
-        this.speed = 0.8 + Math.random() * 1.8; // Left to right movement speed
-        this.size = 2.0 + Math.random() * 3.5; // Larger particles (2px to 5.5px) for clear visibility
-        this.alpha = 0.35 + Math.random() * 0.55; // Higher base opacity (35% to 90%)
-        this.waveSelect = Math.floor(Math.random() * 3); // Assign to one of 3 waveforms
-        this.offsetY = (Math.random() - 0.5) * 80; // Vertical spread of the stream
+        this.speed = 0.5 + Math.random() * 1.5; // Smooth flowing speed
+        this.size = 2.0 + Math.random() * 4.0; // Glowing particles (2px to 6px)
+        this.alpha = 0.4 + Math.random() * 0.5; // High visibility opacity
+        this.waveSelect = Math.floor(Math.random() * 3);
+        this.offsetY = (Math.random() - 0.5) * 120; // Spread vertically across the hero background
         
         // Brand color palette (Cyan, Blue, Purple)
         this.hue = [185, 215, 260][Math.floor(Math.random() * 3)];
@@ -34,18 +33,17 @@ function SoundParticleBackground() {
       update(width, height, time) {
         this.x += this.speed;
 
-        // Wave characteristics based on wave type
+        // Distinct waves to create a fluid, overlapping texture
         let freq, amp, speedCoeff;
         if (this.waveSelect === 0) {
-          freq = 0.0025; amp = 100; speedCoeff = 0.02;
+          freq = 0.002; amp = 120; speedCoeff = 0.015;
         } else if (this.waveSelect === 1) {
-          freq = 0.005; amp = 60; speedCoeff = 0.035;
+          freq = 0.004; amp = 80; speedCoeff = 0.03;
         } else {
-          freq = 0.0018; amp = 120; speedCoeff = 0.015;
+          freq = 0.0015; amp = 150; speedCoeff = 0.01;
         }
 
         const centerY = height / 2;
-        // Base sine wave motion
         const sineVal = Math.sin(this.x * freq + time * speedCoeff);
         this.y = centerY + sineVal * amp + this.offsetY;
 
@@ -53,7 +51,7 @@ function SoundParticleBackground() {
         const edgeFade = Math.sin((this.x / width) * Math.PI);
         this.currentAlpha = Math.max(0, this.alpha * edgeFade);
 
-        // Reset particle when it travels off-screen
+        // Reset if goes off-screen
         if (this.x > width + 10) {
           this.reset(width, height);
         }
@@ -64,37 +62,42 @@ function SoundParticleBackground() {
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
         ctx.fillStyle = `hsla(${this.hue}, 90%, 65%, ${this.currentAlpha})`;
-        ctx.shadowColor = `hsla(${this.hue}, 90%, 65%, ${this.currentAlpha * 0.6})`;
-        ctx.shadowBlur = 6;
+        ctx.shadowColor = `hsla(${this.hue}, 90%, 65%, ${this.currentAlpha * 0.5})`;
+        ctx.shadowBlur = 8;
         ctx.fill();
         ctx.shadowBlur = 0; // reset
       }
     }
 
-    const resizeCanvas = () => {
+    const render = () => {
       const parent = canvas.parentElement;
       if (!parent) return;
-      canvas.width = parent.clientWidth * window.devicePixelRatio;
-      canvas.height = parent.clientHeight * window.devicePixelRatio;
-      canvas.style.width = '100%';
-      canvas.style.height = '100%';
-      
-      // Reset scale before setting it to prevent stacking scale calls
-      ctx.setTransform(1, 0, 0, 1, 0, 0);
-      ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
 
-      const width = canvas.width / window.devicePixelRatio;
-      const height = canvas.height / window.devicePixelRatio;
-      particles = [];
-      for (let i = 0; i < maxParticles; i++) {
-        particles.push(new Particle(width, height));
+      const parentWidth = parent.clientWidth;
+      const parentHeight = parent.clientHeight;
+
+      // Bulletproof Resize Check: Automatically resize internal canvas buffer if container size changed
+      if (
+        canvas.width !== parentWidth * window.devicePixelRatio ||
+        canvas.height !== parentHeight * window.devicePixelRatio
+      ) {
+        canvas.width = parentWidth * window.devicePixelRatio;
+        canvas.height = parentHeight * window.devicePixelRatio;
+        canvas.style.width = '100%';
+        canvas.style.height = '100%';
+
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
+        ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+
+        const width = canvas.width / window.devicePixelRatio;
+        const height = canvas.height / window.devicePixelRatio;
+
+        particles = [];
+        for (let i = 0; i < maxParticles; i++) {
+          particles.push(new Particle(width, height));
+        }
       }
-    };
 
-    resizeCanvas();
-    window.addEventListener('resize', resizeCanvas);
-
-    const render = () => {
       const width = canvas.width / window.devicePixelRatio;
       const height = canvas.height / window.devicePixelRatio;
 
@@ -113,7 +116,6 @@ function SoundParticleBackground() {
 
     return () => {
       cancelAnimationFrame(animationFrameId);
-      window.removeEventListener('resize', resizeCanvas);
     };
   }, []);
 
