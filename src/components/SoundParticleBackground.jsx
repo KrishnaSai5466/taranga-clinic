@@ -11,7 +11,8 @@ function SoundParticleBackground() {
     let animationFrameId;
     let time = 0;
     let particles = [];
-    const maxParticles = 190; // Dense, flowing stream of particles
+    let lastTime = performance.now();
+    const maxParticles = 180; // Dense, elegant particle stream
 
     class Particle {
       constructor(width, height) {
@@ -22,8 +23,9 @@ function SoundParticleBackground() {
         // Set starting coordinate
         this.x = initial ? Math.random() * width : -10;
         
-        // Ultra-slow motion speed (0.05 to 0.18) for a barely-perceptible, relaxing drift
-        this.speed = 0.05 + Math.random() * 0.13; 
+        // Speed in PIXELS PER SECOND (8px/s to 20px/s)
+        // A 1500px wide screen will take ~75 to 180 seconds to traverse.
+        this.speed = 8.0 + Math.random() * 12.0; 
         
         // Exact size constraint: 2px to 6px
         this.size = 2.0 + Math.random() * 4.0; 
@@ -40,20 +42,22 @@ function SoundParticleBackground() {
         this.hue = [188, 222, 268][Math.floor(Math.random() * 3)];
       }
 
-      update(width, height, time) {
-        this.x += this.speed;
+      update(width, height, time, dt) {
+        // Increment x based on elapsed seconds (dt) to keep speed constant across all monitor refresh rates
+        this.x += this.speed * dt;
 
-        // Ultra-slow wave speed coefficients
+        // Mathematical waveforms
         let freq, amp, speedCoeff;
         if (this.waveSelect === 0) {
-          freq = 0.0012; amp = 100; speedCoeff = 0.0006;
+          freq = 0.0012; amp = 100; speedCoeff = 0.05;
         } else if (this.waveSelect === 1) {
-          freq = 0.0025; amp = 60; speedCoeff = 0.001;
+          freq = 0.0025; amp = 60; speedCoeff = 0.09;
         } else {
-          freq = 0.0008; amp = 130; speedCoeff = 0.0004;
+          freq = 0.0008; amp = 130; speedCoeff = 0.03;
         }
 
         const centerY = height / 2;
+        // time represents seconds elapsed
         const sineVal = Math.sin(this.x * freq + time * speedCoeff);
         this.y = centerY + sineVal * amp + this.offsetY;
 
@@ -81,7 +85,7 @@ function SoundParticleBackground() {
       }
     }
 
-    const render = () => {
+    const render = (now) => {
       const parent = canvas.parentElement;
       if (!parent) return;
 
@@ -110,21 +114,31 @@ function SoundParticleBackground() {
         }
       }
 
+      // Calculate delta time in seconds
+      let dt = (now - lastTime) / 1000;
+      // Cap delta time to prevent massive jumps when switching tabs
+      if (dt > 0.1) dt = 0.1;
+      lastTime = now;
+
       const width = canvas.width / window.devicePixelRatio;
       const height = canvas.height / window.devicePixelRatio;
 
       ctx.clearRect(0, 0, width, height);
 
+      // Increment wave progression based on delta time
+      time += dt * 4.0;
+
       particles.forEach(p => {
-        p.update(width, height, time);
+        p.update(width, height, time, dt);
         p.draw(ctx);
       });
 
-      time += 0.08; // Decreased from 0.25 for an ultra-slow motion flow
       animationFrameId = requestAnimationFrame(render);
     };
 
-    render();
+    // Initialize start time and launch animation loop
+    lastTime = performance.now();
+    animationFrameId = requestAnimationFrame(render);
 
     return () => {
       cancelAnimationFrame(animationFrameId);
