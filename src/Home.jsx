@@ -366,6 +366,21 @@ function Home() {
                 <p className="text-slate-300 text-sm">Mon-Sat: 9:00 AM – 8:00 PM (Sunday Closed)</p>
               </div>
             </div>
+
+            {/* WhatsApp Chat Button */}
+            <div className="pt-6">
+              <a 
+                href="https://wa.me/919247346680?text=Hi%2C%20I%20would%20like%20to%20know%20more%20about%20hearing%20assessments%20and%20speech%20therapy%20services%20at%20Taranga%20Clinic." 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="inline-flex items-center gap-3 px-6 py-3.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-2xl transition-all duration-300 shadow-lg shadow-emerald-600/10 hover:shadow-emerald-600/30 text-sm hover:-translate-y-0.5 active:translate-y-0"
+              >
+                <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24">
+                  <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.713-1.457L0 24zm6.059-3.593c1.642.975 3.253 1.488 4.773 1.489 5.485 0 9.949-4.412 9.952-9.83.001-2.624-1.012-5.092-2.855-6.939-1.844-1.847-4.298-2.863-6.924-2.864-5.488 0-9.954 4.413-9.957 9.833 0 1.95.507 3.86 1.468 5.516L1.83 22.08l4.286-1.673zm11.758-6.843c-.3-.15-1.772-.875-2.046-.975-.276-.1-.476-.15-.676.15-.2.3-.775.975-.95 1.175-.175.2-.35.225-.65.075-1.206-.6-2.122-1.05-2.903-2.38-.2-.35-.02-.537.155-.712.158-.158.35-.412.525-.613.174-.2.233-.338.35-.563.115-.225.058-.425-.029-.575-.087-.15-.676-1.63-.926-2.23-.244-.588-.491-.508-.676-.518-.174-.008-.374-.01-.574-.01-.2 0-.525.075-.8.375-.275.3-1.05 1.025-1.05 2.5s1.075 2.9 1.225 3.1c.15.2 2.11 3.22 5.11 4.52 1.41.61 2.5 1.01 3.32 1.27.75.24 1.44.2 1.98.12.6-.09 1.772-.725 2.022-1.425.25-.7.25-1.3.175-1.425-.075-.125-.275-.2-.575-.35z" />
+                </svg>
+                <span>Chat on WhatsApp</span>
+              </a>
+            </div>
           </div>
 
           <div className="bg-slate-950 p-8 rounded-3xl border border-slate-850 shadow-2xl">
