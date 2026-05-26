@@ -11,8 +11,13 @@ function Navbar({ cartCount, onOpenCart }) {
       <div className="max-w-7xl mx-auto flex justify-between items-center">
         {/* Logo */}
         <Link to="/" className="flex items-center gap-3 group">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-500 to-purple-600 flex items-center justify-center text-white font-extrabold text-lg shadow-lg shadow-blue-500/20 group-hover:scale-105 transition-transform duration-300">
-            T
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-500 to-purple-600 flex items-center justify-center text-white shadow-lg shadow-blue-500/20 group-hover:scale-105 transition-transform duration-300">
+            <svg className="w-5.5 h-5.5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M10 21a6 6 0 0 0 6-6V9a6 6 0 0 0-12 0v2" />
+              <path d="M10 15a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z" />
+              <path d="M19 5a10 10 0 0 1 0 14" />
+              <path d="M16 8a6 6 0 0 1 0 8" />
+            </svg>
           </div>
           <span className="text-xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-indigo-200 to-purple-400">
             Taranga Clinic
