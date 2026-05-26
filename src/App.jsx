@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation, Link } from 'react-router-dom';
 import Home from './Home';
 import Shop from './Shop';
 
@@ -140,9 +140,8 @@ function AppContent() {
           <div className="space-y-4">
             <h4 className="text-white font-extrabold text-sm tracking-wide font-sans">Quick Navigation</h4>
             <ul className="space-y-2">
-              <li><a href="/shop" className="hover:text-blue-400">D2C Clinic Store</a></li>
-
-              <li><a href="/resources" className="hover:text-blue-400">Blog Resources & Self-Check</a></li>
+              <li><Link to="/shop" className="hover:text-blue-400">D2C Clinic Store</Link></li>
+              <li><Link to="/resources" className="hover:text-blue-400">Blog Resources & Self-Check</Link></li>
             </ul>
           </div>
           <div className="space-y-4">
